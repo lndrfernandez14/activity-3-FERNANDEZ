@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prelim Activity 3</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+<div id="app">
+  <h1 class="title">Interactive Shopping Cart in Vue.js</h1>
+  <div class="divProd" v-for="(product, index) in products" :key="index">
+    <h3 class="prodName">{{ product.name }}</h3>
+    <p class="prodPrice">Price: ${{ product.price }}</p>
+    <input class="prodQty" type="number" v-model="product.quantity" placeholder="Quantity">
+    <button class="btnCart" @click="addToCart(index)">
+      <i class="fas fa-cart-plus"></i>
+    </button>
+  </div>
+
+  <div class="divCart">
+    <h2 class="cart">CART</h2>
+    <ul>
+      <li class="prodCart" v-for="(item, index) in cart" :key="index">
+        {{ item.name }} - ${{ item.price * item.quantity }} ({{ item.quantity }})
+        <input class="prodTotal" type="number" v-model="item.quantity" @change="updateQuantity(index)">
+        <button class="btnDelete" @click="removeFromCart(index)">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </li>
+    </ul>
+    <p class="totalPrice">Total Price: ${{ getTotalPrice() }}</p>
+  </div>
+</div>
+
+<script>
+new Vue({
+  el: '#app',
+  data: {
+    isLoggedIn: false,
+    products: [
+      { name: 'Locomotion', price: 10, quantity: 0 },
+      { name: 'Spot Rebel', price: 50, quantity: 0 },
+      { name: 'Soul Mates', price: 10, quantity: 0 },
+      { name: 'Wonderfur', price: 20, quantity: 0 },
+      { name: 'Rich List', price: 30, quantity: 0 },
+      { name: 'Early Hits', price: 30, quantity: 0 },
+      { name: 'Cha Ching', price: 10, quantity: 0 },
+      { name: 'Mugnificient', price: 20, quantity: 0 }
+    ],
+    cart: []
+  },
+  methods: {
+    addToCart(index) {
+      if (this.products[index].quantity > 0) {
+        alert("User successfully logged in!");
+        this.cart.push({
+          ...this.products[index],
+          quantity: this.products[index].quantity
+        });
+        this.products[index].quantity = 0; // Reset quantity after adding to cart
+      }
+    },
+    removeFromCart(index) {
+      this.cart.splice(index, 1);
+    },
+    updateQuantity(index) {
+      if (this.cart[index].quantity <= 0) {
+        this.cart.splice(index, 1); // Remove item if quantity is zero or less
+      }
+    },
+    getTotalPrice() {
+      let total = 0;
+      this.cart.forEach(item => {
+        total += item.price * item.quantity;
+      });
+      return total;
+    }
+  }
+});
+</script>
+
+<style>
+  .title {
+    margin: 20px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: white;
+    width: 100%;
+    padding: 10px;
+    background-color: rgb(0, 144, 211);
+  }
+  .divProd {
+    padding: 20px;
+    margin: 20px;
+    background-color: rgb(0, 144, 211);
+    border-radius: 6px;
+    height: 200px;
+    width: 200px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+  .prodName {
+    font-family: 'Courier New', Courier, monospace;
+  }
+  .prodPrice {
+    font-family: 'Courier New', Courier, monospace;
+    color: rgb(0, 145, 0);
+  }
+  .prodQty {
+    width: 100px;
+  }
+  .btnCart {
+    color: rgb(0, 144, 211);
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+  .btnDelete {
+    color: rgb(250, 67, 67);
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+  .divCart {
+    padding-top: 10px;
+    margin-left: 10px;
+    padding-left: 20px;
+    background-color: rgb(0, 144, 211);
+    border-radius: 6px;
+    height: 32vh;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  .cart {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: white;
+  }
+  .totalPrice {
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+  }
+  .prodTotal {
+    width: 40px;
+  }
+  .prodCart {
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+    margin: 10px;
+  }
+</style>
+
+</body>
+</html>
